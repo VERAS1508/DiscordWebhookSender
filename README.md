@@ -242,25 +242,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 🤝 Contributing
 
-We welcome contributions! Here's how:
-
-1. **Fork** the repository
-2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
-3. **Commit your changes**: `git commit -m 'Add amazing feature'`
-4. **Push to the branch**: `git push origin feature/amazing-feature`
-5. **Open a Pull Request**
-
-### Development Guidelines
-- Follow existing code style and structure
-- Add comments for complex logic
-- Test changes thoroughly
-- Update documentation if needed
-
-## 🆘 Support
-
-- **GitHub Issues**: [Open an issue](https://github.com/yourusername/webook/issues) for bugs or feature requests
-- **Documentation**: Check this README first
-- **Community**: Join our Discord server (link coming soon)
 
 ## ⚠️ Disclaimer
 
