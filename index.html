@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webook - Discord Webhook Interface</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-robot"></i> Webook</h1>
+            <p class="subtitle">A Discord Webhook Interface similar to Discohook</p>
+        </header>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="webhook-section">
+                    <h2><i class="fas fa-link"></i> Webhooks</h2>
+                    <div class="webhook-list" id="webhookList">
+                        <!-- Webhook items will be added here -->
+                        <div class="empty-state">
+                            <i class="fas fa-plus-circle"></i>
+                            <p>No webhooks added yet</p>
+                            <p class="small">Click "Add Webhook" to get started</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="addWebhookBtn">
+                        <i class="fas fa-plus"></i> Add Webhook
+                    </button>
+                </div>
+
+                <div class="saved-messages">
+                    <h2><i class="fas fa-save"></i> Saved Messages</h2>
+                    <div class="message-list" id="savedMessages">
+                        <!-- Saved messages will be added here -->
+                        <div class="empty-state">
+                            <i class="fas fa-comment-alt"></i>
+                            <p>No saved messages</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="editor-section">
+                <div class="message-editor">
+                    <h2><i class="fas fa-edit"></i> Message Editor</h2>
+                    
+                    <div class="form-group">
+                        <label for="username"><i class="fas fa-user"></i> Username</label>
+                        <input type="text" id="username" placeholder="Webhook username (optional)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="avatarUrl"><i class="fas fa-image"></i> Avatar URL</label>
+                        <input type="text" id="avatarUrl" placeholder="https://example.com/avatar.png">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="content"><i class="fas fa-comment"></i> Message Content</label>
+                        <textarea id="content" rows="4" placeholder="Enter your message here..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-palette"></i> Embed Builder</label>
+                        <div class="embed-controls">
+                            <button class="btn btn-secondary" id="addEmbedBtn">
+                                <i class="fas fa-plus"></i> Add Embed
+                            </button>
+                            <button class="btn btn-secondary" id="clearEmbedsBtn">
+                                <i class="fas fa-trash"></i> Clear All
+                            </button>
+                        </div>
+                        <div class="embed-list" id="embedList">
+                            <!-- Embeds will be added here -->
+                        </div>
+                    </div>
+
+                <div class="action-buttons">
+                        <button class="btn btn-success" id="sendBtn">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                        <button class="btn btn-secondary" id="previewBtn">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
+                        <button class="btn btn-secondary" id="saveMessageBtn">
+                            <i class="fas fa-save"></i> Save Message
+                        </button>
+                        <button class="btn btn-secondary" id="clearBtn">
+                            <i class="fas fa-broom"></i> Clear All
+                        </button>
+                    </div>
+                    
+                    <div class="advanced-controls">
+                        <h3><i class="fas fa-cogs"></i> Advanced Controls</h3>
+                        
+                        <div class="form-group">
+                            <label for="loopCount"><i class="fas fa-redo"></i> Loop Count</label>
+                            <input type="number" id="loopCount" min="1" max="100" value="1" placeholder="Number of times to send">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="delayMs"><i class="fas fa-clock"></i> Delay (ms)</label>
+                            <input type="number" id="delayMs" min="0" max="60000" value="1000" placeholder="Delay between sends in milliseconds">
+                            <div class="checkbox-inline">
+                                <input type="checkbox" id="randomDelay">
+                                <label for="randomDelay">Random delay (±50%)</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-code"></i> Message Variables</label>
+                            <div class="variables-help">
+                                <p>Use variables in your message: <code>{counter}</code>, <code>{timestamp}</code>, <code>{date}</code>, <code>{time}</code>, <code>{random}</code>, <code>{random_name}</code>, <code>{random_avatar}</code></p>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-layer-group"></i> Message Pool</label>
+                            <div class="checkbox-inline">
+                                <input type="checkbox" id="useMessagePool">
+                                <label for="useMessagePool">Use sequential message from pool</label>
+                            </div>
+                            <div class="message-pool-controls" id="messagePoolControls" style="display: none; margin-top: 10px;">
+                                <div class="btn-group">
+                                    <button class="btn btn-secondary btn-small" id="addToPoolBtn">
+                                        <i class="fas fa-plus"></i> Add Current to Pool
+                                    </button>
+                                    <button class="btn btn-secondary btn-small" id="managePoolBtn">
+                                        <i class="fas fa-cog"></i> Manage Pool
+                                    </button>
+                                </div>
+                                <div class="pool-info" id="poolInfo" style="font-size: 0.85rem; color: #888; margin-top: 5px;">
+                                    Pool: 0 messages
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-user-circle"></i> Random Webhook Identity</label>
+                            <div class="checkbox-inline">
+                                <input type="checkbox" id="useRandomIdentity">
+                                <label for="useRandomIdentity">Use random name/avatar</label>
+                            </div>
+                            <div class="random-identity-controls" id="randomIdentityControls" style="display: none; margin-top: 10px;">
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <label style="font-size: 0.9rem;">Names (one per line)</label>
+                                    <textarea id="randomNames" rows="2" placeholder="Bot 1&#10;Bot 2&#10;Bot 3" style="font-size: 0.9rem;"></textarea>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <label style="font-size: 0.9rem;">Avatar URLs (one per line)</label>
+                                    <textarea id="randomAvatars" rows="2" placeholder="https://example.com/avatar1.png&#10;https://example.com/avatar2.png" style="font-size: 0.9rem;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-bullseye"></i> Target Webhooks</label>
+                            <div class="checkbox-group" id="webhookTargets">
+                                <!-- Webhook checkboxes will be added here -->
+                                <div class="empty-state small">
+                                    <i class="fas fa-link"></i>
+                                    <p>No webhooks added yet</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="advanced-buttons">
+                            <button class="btn btn-warning" id="loopSendBtn">
+                                <i class="fas fa-sync-alt"></i> Start Loop
+                            </button>
+                            <button class="btn btn-danger" id="stopLoopBtn" disabled>
+                                <i class="fas fa-stop"></i> Stop Loop
+                            </button>
+                            <button class="btn btn-info" id="selectAllBtn">
+                                <i class="fas fa-check-square"></i> Select All
+                            </button>
+                            <button class="btn btn-info" id="deselectAllBtn">
+                                <i class="fas fa-square"></i> Deselect All
+                            </button>
+                        </div>
+                        
+                        <div class="btn-group">
+                            <button class="btn btn-test btn-small" id="testWebhookBtn">
+                                <i class="fas fa-vial"></i> Test Webhook
+                            </button>
+                            <button class="btn btn-schedule btn-small" id="scheduleBtn">
+                                <i class="fas fa-clock"></i> Schedule
+                            </button>
+                            <button class="btn btn-secondary btn-small" id="bulkImportBtn">
+                                <i class="fas fa-file-import"></i> Bulk Import
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="history-section">
+                        <h3><i class="fas fa-history"></i> Send History</h3>
+                        <div class="history-list" id="historyList">
+                            <div class="empty-state small">
+                                <i class="fas fa-history"></i>
+                                <p>No send history yet</p>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-secondary btn-small" id="clearHistoryBtn">
+                                <i class="fas fa-trash"></i> Clear History
+                            </button>
+                            <button class="btn btn-secondary btn-small" id="exportHistoryBtn">
+                                <i class="fas fa-download"></i> Export History
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preview-section">
+                    <h2><i class="fas fa-eye"></i> Preview</h2>
+                    <div class="preview-container" id="previewContainer">
+                        <div class="preview-placeholder">
+                            <i class="fas fa-comment-slash"></i>
+                            <p>Message preview will appear here</p>
+                            <p class="small">Edit the message to see a preview</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="webhookModal">
+            <div class="modal-content">
+                <h2><i class="fas fa-link"></i> Add Webhook</h2>
+                <div class="form-group">
+                    <label for="webhookName"><i class="fas fa-tag"></i> Webhook Name</label>
+                    <input type="text" id="webhookName" placeholder="My Server Webhook">
+                </div>
+                <div class="form-group">
+                    <label for="webhookUrl"><i class="fas fa-link"></i> Webhook URL</label>
+                    <input type="text" id="webhookUrl" placeholder="https://discord.com/api/webhooks/...">
+                    <p class="help-text">Enter your Discord webhook URL</p>
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                    <button class="btn btn-primary" id="saveWebhookBtn">Save Webhook</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="embedModal">
+            <div class="modal-content">
+                <h2><i class="fas fa-palette"></i> Edit Embed</h2>
+                <div class="form-group">
+                    <label for="embedTitle">Title</label>
+                    <input type="text" id="embedTitle" placeholder="Embed title">
+                </div>
+                <div class="form-group">
+                    <label for="embedDescription">Description</label>
+                    <textarea id="embedDescription" rows="3" placeholder="Embed description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="embedColor">Color</label>
+                    <input type="color" id="embedColor" value="#5865F2">
+                </div>
+                <div class="form-group">
+                    <label for="embedFooter">Footer</label>
+                    <input type="text" id="embedFooter" placeholder="Footer text">
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn btn-secondary" id="cancelEmbedBtn">Cancel</button>
+                    <button class="btn btn-primary" id="saveEmbedBtn">Save Embed</button>
+                </div>
+            </div>
+        </div>
+
+    <footer>
+        <p>Webook &copy; 2025 | A Discord Webhook Interface</p>
+        <p class="footer-links">
+            <a href="#" id="exportBtn"><i class="fas fa-download"></i> Export Config</a>
+            <a href="#" id="importBtn"><i class="fas fa-upload"></i> Import Config</a>
+            <a href="#" id="helpBtn"><i class="fas fa-question-circle"></i> Help</a>
+            <a href="#" id="githubBtn"><i class="fab fa-github"></i> GitHub</a>
+        </p>
+    </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
