@@ -1,6 +1,6 @@
 # Webook - Discord Webhook Interface
 
-![Webook Screenshot](https://imgur.com/a/jFj4c1Y)
+![Webook Screenshot](https://i.imgur.com/6e8Qc3l.png)
 
 A powerful, feature-rich web-based Discord webhook interface similar to Discohook. Manage multiple webhooks, compose messages with rich embeds, schedule deliveries, and automate message sending - all from your browser.
 
